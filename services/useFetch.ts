@@ -13,6 +13,7 @@ const useFetch = <T>(fetchFunction:()=>Promise<T>,autoFetch = true)=>{
             setData(result);
         }
         catch (err){
+            console.log(err);
             setError(err instanceof  Error? err : new Error("An Error Occured"));
         }
         finally {
@@ -23,14 +24,15 @@ const useFetch = <T>(fetchFunction:()=>Promise<T>,autoFetch = true)=>{
     const reset = ()=>{
         setData(null);
         setLoading(false);
+
         setError(null);
     }
 
-    useEffect(()=>{
-        if(autoFetch){
+    useEffect(() => {
+        if (autoFetch) {
             fetchData();
         }
-    })
+    }, []); // 👈 important
 
     return {data,loading,error,refetchData:fetchData,reset};
 }

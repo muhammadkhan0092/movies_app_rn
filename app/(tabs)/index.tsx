@@ -1,11 +1,24 @@
-import {Text, View, StyleSheet, Image, ScrollView} from "react-native";
+import {Text, View, StyleSheet, Image, ScrollView, ActivityIndicator} from "react-native";
 import {images} from "@/constants/images";
 import HomeSearchBar from "@/components/HomeSearchBar";
 import {icons} from "@/constants/icons";
 import {useRouter} from "expo-router";
+import useFetch from "@/services/useFetch";
+import {fetchMovies} from "@/services/api";
 
 export default function Index() {
     const router = useRouter();
+    const {
+        data:movies,
+        loading:moviesLoading,
+        error:moviesError
+    } = useFetch(
+        ()=>fetchMovies(
+            {
+                query:''
+            }
+        )
+    )
     return (
         <View style={styles.fullScreen}>
             <Image source={images.bg} style={styles.topBg}/>
@@ -17,12 +30,24 @@ export default function Index() {
                 <Image
                     style={styles.logo}
                     source={icons.logo}/>
-                <View style={styles.searchStyle}>
-                    <HomeSearchBar
-                        placeHolderText="Search For A Movie"
-                        onPress = {()=>router.push("/search")}
-                    />
-                </View>
+                {
+                    moviesLoading?(
+                        <ActivityIndicator
+                            size="large"
+                            color="#0000ff"
+                            style={styles.loading}
+                        />
+                    ) :moviesError?(
+                        <Text>Error : {moviesError?.message}</Text>
+                    ):(
+                        <View style={styles.searchStyle}>
+                            <HomeSearchBar
+                                placeHolderText="Search For A Movie"
+                                onPress = {()=>router.push("/search")}
+                            />
+                        </View>
+                    )
+                }
             </ScrollView>
         </View>
     );
@@ -53,5 +78,9 @@ const styles = StyleSheet.create({
     searchStyle:{
         marginTop:24,
         width:"100%",
+    },
+    loading:{
+        marginTop:10,
+        alignSelf: "center",
     }
 });
