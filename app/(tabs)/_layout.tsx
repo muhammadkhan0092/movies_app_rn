@@ -16,14 +16,14 @@ export default function AppTabs() {
             tabBar={
             (props) => <CustomBottomTabs {...props} />
         }>
-            <Tab.Screen name="Home" component={HomeScreen} options={{
+            <Tab.Screen name="home" component={HomeScreen} options={{
                 // 👇 Add background color here for this screen
                 // if sceneContainerStyle not recognized
                 tabBarStyle: { backgroundColor: "transparent" },
             }}/>
-            <Tab.Screen name="Saved" component={SavedScreen} />
-            <Tab.Screen name="Search" component={SearchScreen} />
-            <Tab.Screen name="Profile" component={ProfileScreen} />
+            <Tab.Screen name="saved" component={SavedScreen} />
+            <Tab.Screen name="search" component={SearchScreen} />
+            <Tab.Screen name="profile" component={ProfileScreen} />
         </Tab.Navigator>
     );
 }

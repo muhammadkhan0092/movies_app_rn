@@ -5,7 +5,7 @@ import { icons } from "@/constants/icons";
 
 export default function CustomBottomTabs({ state, descriptors, navigation }: BottomTabBarProps) {
     return (
-        <View style={styles.wrapper}>   {/* ✅ New wrapper */}
+        <View style={styles.wrapper}>
             <View style={styles.container}>
                 {state.routes.map((route, index) => {
                     const { options } = descriptors[route.key];
@@ -27,13 +27,21 @@ export default function CustomBottomTabs({ state, descriptors, navigation }: Bot
 
                     let iconSource;
                     switch (route.name) {
-                        case "Home": iconSource = icons.home; break;
-                        case "Search": iconSource = icons.search; break;
-                        case "Saved": iconSource = icons.save; break;
-                        case "Profile": iconSource = icons.person; break;
+                        case "home": iconSource = icons.home; break;
+                        case "search": iconSource = icons.search; break;
+                        case "saved": iconSource = icons.save; break;
+                        case "profile": iconSource = icons.person; break;
                         default: iconSource = icons.person;
                     }
 
+                    let labelText;
+                    switch (route.name){
+                        case "home":labelText = "Home"; break;
+                        case "search":labelText = "Search"; break;
+                        case "saved":labelText = "Saved"; break;
+                        case "profile":labelText = "Profile"; break;
+                        default: iconSource = "Home";
+                    }
                     return (
                         <TouchableOpacity
                             key={route.key}
@@ -42,7 +50,7 @@ export default function CustomBottomTabs({ state, descriptors, navigation }: Bot
                             {isFocused ? (
                                 <View style={styles.selectedLayout}>
                                     <Image source={iconSource} style={styles.selectedIcon} />
-                                    <Text style={styles.selectedText}>{label}</Text>
+                                    <Text style={styles.selectedText}>{labelText}</Text>
                                 </View>
                             ) : (
                                 <View style={styles.unselectedLayout}>
