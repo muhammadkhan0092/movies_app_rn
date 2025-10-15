@@ -1,11 +1,11 @@
-import {Text, View, StyleSheet, Image, ScrollView, ActivityIndicator} from "react-native";
+import {Text, View, StyleSheet, Image, ScrollView, ActivityIndicator, FlatList} from "react-native";
 import {images} from "@/constants/images";
 import HomeSearchBar from "@/components/HomeSearchBar";
+import MovieCard from "@/components/MovieCard";
 import {icons} from "@/constants/icons";
 import {useRouter} from "expo-router";
 import useFetch from "@/services/useFetch";
 import {fetchMovies} from "@/services/api";
-
 export default function Index() {
     const router = useRouter();
     const {
@@ -40,10 +40,25 @@ export default function Index() {
                     ) :moviesError?(
                         <Text>Error : {moviesError?.message}</Text>
                     ):(
-                        <View style={styles.searchStyle}>
-                            <HomeSearchBar
-                                placeHolderText="Search For A Movie"
-                                onPress = {()=>router.push("/search")}
+                        <View>
+                            <View style={styles.searchStyle}>
+                                <HomeSearchBar
+                                    placeHolderText="Search For A Movie"
+                                    onPress = {()=>router.push("/search")}
+                                />
+                            </View>
+                            <Text style={{marginTop:50,fontSize:18,lineHeight:20,fontWeight:'700',color:'white',marginBottom:12}}>Latest Movies</Text>
+                            <FlatList
+                                data={movies}
+                                scrollEnabled={false}
+                                renderItem={
+                                    ({item})=>(
+                                        <MovieCard {...item}/>
+                                    )
+                                }
+                                keyExtractor={(item)=>item.id.toString()}
+                                numColumns={3}
+                                columnWrapperStyle={{gap:20}}
                             />
                         </View>
                     )
@@ -62,6 +77,7 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         bottom: 0,
+        paddingBottom:100
     },
     logo:{
         alignSelf: "center",
