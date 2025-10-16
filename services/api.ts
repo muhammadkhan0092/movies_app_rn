@@ -14,9 +14,9 @@ interface props{
 export const fetchMovies = async ({query}:props)=>{
     console.log("API KEY:", process.env.EXPO_PUBLIC_MOVIE_API_KEY);
 
-    const endPoint =`${TMDB_CONFIG.BASE_URL}/discover/movie?sort_by=popularity.desc`
-        // query? `${TMDB_CONFIG.BASE_URL}/search/movie?query=${encodeURIComponent(query)}`
-        // :`${TMDB_CONFIG.BASE_URL}/discover/movie?sort_by=popularity.desc`
+    const endPoint =
+        query? `${TMDB_CONFIG.BASE_URL}/search/movie?query=${encodeURIComponent(query)}`
+        :`${TMDB_CONFIG.BASE_URL}/discover/movie?sort_by=popularity.desc`
     const response = await fetch(endPoint,{
         method:'GET',
         headers:TMDB_CONFIG.headers

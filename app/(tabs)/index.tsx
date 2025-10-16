@@ -6,6 +6,9 @@ import {icons} from "@/constants/icons";
 import {useRouter} from "expo-router";
 import useFetch from "@/services/useFetch";
 import {fetchMovies} from "@/services/api";
+import TopBg from "@/components/TopBg";
+import Logo from "@/components/Logo";
+import Loading from "@/components/Loading";
 export default function Index() {
     const router = useRouter();
     const {
@@ -23,20 +26,11 @@ export default function Index() {
         <View style={styles.fullScreen}>
             <Image source={images.bg} style={styles.topBg}/>
             <ScrollView style={styles.scrollStyle}>
-                <Image
-                    style={styles.topBg}
-                    source={images.bg}
-                />
-                <Image
-                    style={styles.logo}
-                    source={icons.logo}/>
+                <TopBg/>
+                <Logo/>
                 {
                     moviesLoading?(
-                        <ActivityIndicator
-                            size="large"
-                            color="#0000ff"
-                            style={styles.loading}
-                        />
+                        <Loading/>
                     ) :moviesError?(
                         <Text>Error : {moviesError?.message}</Text>
                     ):(
@@ -72,7 +66,7 @@ const styles = StyleSheet.create({
     fullScreen: {
         flex: 1,
         backgroundColor: "#030014",
-        position: "absolute", // 👈 makes it ignore layout padding from bottom tab
+        position: "absolute",
         top: 0,
         left: 0,
         right: 0,

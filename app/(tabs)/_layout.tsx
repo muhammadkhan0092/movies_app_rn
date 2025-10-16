@@ -17,8 +17,6 @@ export default function AppTabs() {
             (props) => <CustomBottomTabs {...props} />
         }>
             <Tab.Screen name="home" component={HomeScreen} options={{
-                // 👇 Add background color here for this screen
-                // if sceneContainerStyle not recognized
                 tabBarStyle: { backgroundColor: "transparent" },
             }}/>
             <Tab.Screen name="saved" component={SavedScreen} />
