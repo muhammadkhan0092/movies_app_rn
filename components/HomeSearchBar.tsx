@@ -4,8 +4,17 @@ import {icons} from "@/constants/icons";
 interface Props {
     placeHolderText: string;
     onPress?: () => void;
+    onValueChanged?: (text :string) => void;
+    value : string
 }
-const HomeSearchBar = ({placeHolderText,onPress}:Props)=>{
+const HomeSearchBar = (
+    {
+        placeHolderText,
+        onPress,
+        onValueChanged,
+        value
+    }:Props
+)=>{
     return(
         <View style={styles.container}>
             <Image
@@ -15,8 +24,8 @@ const HomeSearchBar = ({placeHolderText,onPress}:Props)=>{
             <TextInput
                 placeholder={placeHolderText}
                 onPress={onPress}
-                value=""
-                onChangeText={(text)=>{}}
+                value={value}
+                onChangeText={onValueChanged}
                 placeholderTextColor={"#A8B5DB"}
                 style={styles.hintStyle}
             />

@@ -1,36 +1,89 @@
 import {View, Text, StyleSheet, Image, ScrollView, ActivityIndicator, FlatList} from 'react-native';
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {images} from "@/constants/images";
 import useFetch from "@/services/useFetch";
 import {fetchMovies} from "@/services/api";
 import MovieCard from "@/components/MovieCard";
 import {useRouter} from "expo-router";
+import Logo from "@/components/Logo";
+import TopBg from "@/components/TopBg";
+import HomeSearchBar from "@/components/HomeSearchBar";
+import Loading from "@/components/Loading";
+import * as sea from "node:sea";
 const Search = () => {
     const router = useRouter();
+    const [searchQuery,setSearchQuery] = useState("")
     const {
         data:movies,
-        loading:moviesLoading,
-        error:moviesError
+        loading,
+        error,
+        refetchData,
+        reset
     } = useFetch(
         ()=>fetchMovies(
             {
-                query:''
+                query:searchQuery
             }
-        )
+        ),false
     )
+
+    useEffect(()=>{
+        const timeoutId  =setTimeout(async ()=>{
+            if(searchQuery.trim()){
+                await refetchData()
+            }
+            else {
+                reset()
+            }
+        },500);
+        return ()=>{
+            clearTimeout(timeoutId);
+        }
+    },[searchQuery])
     return (
         <View style={styles.fullScreen}>
-            <Image source={images.bg} style={styles.topBg}/>
             <FlatList
                 data={movies}
                 renderItem=
                     {
-                ({item})=><MovieCard {...item}/>
-            }
+                ({item})=><MovieCard {...item}/>}
+                columnWrapperStyle={{gap:20}}
                 keyExtractor={(item)=>item.id.toString()}
                 numColumns={3}
+                style={{paddingStart:20,paddingEnd:20}}
+                ListEmptyComponent={
+                !loading && !error?(
+                    <Text
+                        style={{color:'white',fontSize:20,fontWeight:'700',alignSelf:'center',marginTop:20}}
+                    >
+                        {searchQuery.trim()?`No Movies Found for ${searchQuery}`:"Search For A Movie"}
+                    </Text>
+                ):null
+                }
                 ListHeaderComponent={
                 <>
+                    <TopBg/>
+                    <Logo/>
+                    <View style={{marginTop:24}}>
+                        <HomeSearchBar placeHolderText={"movies"} value={searchQuery} onValueChanged={
+                            (text) => setSearchQuery(text)
+                        } />
+                    </View>
+                    {
+                        loading && (
+                            <Loading/>
+                        )
+                    }
+                    {
+                        error && (
+                            <Text>Error Loading Movies</Text>
+                        )
+                    }
+                    {
+                        !error && !loading && searchQuery.trim() && movies?.length>0 &&(
+                            <Text style={{marginTop:40,marginBottom:20,color:'white',fontSize:20,lineHeight:28,fontWeight:"700"}}>Search Results for</Text>
+                        )
+                    }
                 </>
                 }
             />
@@ -49,25 +102,5 @@ const styles = StyleSheet.create({
         right: 0,
         bottom: 0,
         paddingBottom:100
-    },
-    logo:{
-        alignSelf: "center",
-        marginTop:54,
-    },
-    topBg:{
-        position: "absolute",
-        width: "100%",
-    },
-    scrollStyle:{
-        flex: 1,
-        paddingHorizontal:20,
-    },
-    searchStyle:{
-        marginTop:24,
-        width:"100%",
-    },
-    loading:{
-        marginTop:10,
-        alignSelf: "center",
     }
 });
