@@ -39,6 +39,7 @@ export default function Index() {
                                 <HomeSearchBar
                                     placeHolderText="Search For A Movie"
                                     onPress = {()=>router.push("/search")}
+                                    value={""}
                                 />
                             </View>
                             <Text style={{marginTop:50,fontSize:18,lineHeight:20,fontWeight:'700',color:'white',marginBottom:12}}>Latest Movies</Text>

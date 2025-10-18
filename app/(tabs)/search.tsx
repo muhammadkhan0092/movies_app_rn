@@ -10,6 +10,7 @@ import TopBg from "@/components/TopBg";
 import HomeSearchBar from "@/components/HomeSearchBar";
 import Loading from "@/components/Loading";
 import * as sea from "node:sea";
+import {updateSearchCount} from "@/services/appwrite";
 const Search = () => {
     const router = useRouter();
     const [searchQuery,setSearchQuery] = useState("")
@@ -31,6 +32,13 @@ const Search = () => {
         const timeoutId  =setTimeout(async ()=>{
             if(searchQuery.trim()){
                 await refetchData()
+                if (movies?.length > 0 && movies?.[0]){
+                    await updateSearchCount(searchQuery,movies[0])
+                }
+                else
+                {
+                    console.log("error")
+                }
             }
             else {
                 reset()
