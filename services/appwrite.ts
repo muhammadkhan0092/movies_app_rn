@@ -1,5 +1,4 @@
 import {Client, Databases, ID, Query} from "react-native-appwrite";
-import {data} from "browserslist";
 
 const DATABASE_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID!;
 const COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_ID!;
@@ -29,10 +28,25 @@ export const updateSearchCount = async (query: string,movies:Movie) => {
             await database.createDocument(DATABASE_ID,COLLECTION_ID,ID.unique(),{
                 count:1,
                 searchTerm:query,
-                poster_url:`https://image/tmdb.org/t/p/w500${movies.poster_path}`,
+                poster_url:`https://image.tmdb.org/t/p/w500${movies.poster_path}`,
                 title:`${movies.title}`,
+                movie_id:movies.id
             })
         }
+    }
+    catch (error) {
+        console.log("err is ",error);
+        throw error;
+    }
+}
+export const getTrendingMovies = async ()=> {
+    try {
+        const result = await database.listDocuments(DATABASE_ID, COLLECTION_ID, [
+            Query.limit(5),
+            Query.orderDesc('count')
+        ])
+        console.log(`Result of trending movies ${result.documents}`)
+        return result.documents as unknown as TrendingMovie[];
     }
     catch (error) {
         console.log("err is ",error);

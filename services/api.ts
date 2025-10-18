@@ -12,8 +12,6 @@ interface props{
     query:string
 }
 export const fetchMovies = async ({query}:props)=>{
-    console.log("API KEY:", process.env.EXPO_PUBLIC_MOVIE_API_KEY);
-
     const endPoint =
         query? `${TMDB_CONFIG.BASE_URL}/search/movie?query=${encodeURIComponent(query)}`
         :`${TMDB_CONFIG.BASE_URL}/discover/movie?sort_by=popularity.desc`
@@ -22,11 +20,9 @@ export const fetchMovies = async ({query}:props)=>{
         headers:TMDB_CONFIG.headers
     })
     if(!response.ok){
-        console.log("error is ",response.statusText)
         // @ts-ignore
         throw new Error("Failed to Fetch the movies",response.statusText)
     }
-    console.log("after error");
     const data = await response.json();
     return data.results;
 }

@@ -9,6 +9,8 @@ import {fetchMovies} from "@/services/api";
 import TopBg from "@/components/TopBg";
 import Logo from "@/components/Logo";
 import Loading from "@/components/Loading";
+import {getTrendingMovies} from "@/services/appwrite";
+import TrendingCard from "@/components/TrendingCard";
 export default function Index() {
     const router = useRouter();
     const {
@@ -22,12 +24,45 @@ export default function Index() {
             }
         )
     )
+    const {
+        data:trendingMovies,
+        loading:trendingMoviesLoading,
+        error:trendingMoviesError
+    } = useFetch(()=>getTrendingMovies())
     return (
         <View style={styles.fullScreen}>
             <Image source={images.bg} style={styles.topBg}/>
             <ScrollView style={styles.scrollStyle}>
                 <TopBg/>
                 <Logo/>
+                <View style={styles.searchStyle}>
+                    <HomeSearchBar
+                        placeHolderText="Search For A Movie"
+                        onPress = {()=>router.push("/search")}
+                        value={""}
+                    />
+                </View>
+                {
+                    trendingMoviesLoading?(
+                        <Loading/>
+                    ):trendingMoviesError?(
+                        <Text>Error : {moviesError?.message}</Text>
+                    ):(
+                        <View>
+                            <Text style={{marginTop:50,fontSize:18,lineHeight:20,fontWeight:'700',color:'white',marginBottom:12}}>Popular Movies</Text>
+                            <FlatList
+                                horizontal
+                                ItemSeparatorComponent = {()=>
+                                    (
+                                        <View style={{width:14}}></View>
+                                    )
+                            }
+                                data={trendingMovies}
+                                renderItem={({item,index})=><TrendingCard movie={item} index={index}/> }
+                            />
+                        </View>
+                    )
+                }
                 {
                     moviesLoading?(
                         <Loading/>
@@ -35,13 +70,6 @@ export default function Index() {
                         <Text>Error : {moviesError?.message}</Text>
                     ):(
                         <View>
-                            <View style={styles.searchStyle}>
-                                <HomeSearchBar
-                                    placeHolderText="Search For A Movie"
-                                    onPress = {()=>router.push("/search")}
-                                    value={""}
-                                />
-                            </View>
                             <Text style={{marginTop:50,fontSize:18,lineHeight:20,fontWeight:'700',color:'white',marginBottom:12}}>Latest Movies</Text>
                             <FlatList
                                 data={movies}
