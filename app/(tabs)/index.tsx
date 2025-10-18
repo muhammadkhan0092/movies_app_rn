@@ -1,8 +1,7 @@
-import {Text, View, StyleSheet, Image, ScrollView, ActivityIndicator, FlatList} from "react-native";
+import {Text, View, StyleSheet, Image, ScrollView, FlatList} from "react-native";
 import {images} from "@/constants/images";
 import HomeSearchBar from "@/components/HomeSearchBar";
 import MovieCard from "@/components/MovieCard";
-import {icons} from "@/constants/icons";
 import {useRouter} from "expo-router";
 import useFetch from "@/services/useFetch";
 import {fetchMovies} from "@/services/api";
