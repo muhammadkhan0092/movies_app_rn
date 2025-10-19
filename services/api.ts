@@ -37,7 +37,7 @@ export const getMovieDetails = async (movieId : string)=>{
             // @ts-ignore
             throw new Error("Failed to Fetch the movie DETAILS",response.statusText)
         }
-        return await response.json();
+        return await response.json() as MovieDetails;
     }
     catch (error) {
         console.log(error);
